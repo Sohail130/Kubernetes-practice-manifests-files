@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-deployment-nautilus
+spec:
+  selector:
+    matchLabels:
+      app: node
+  template:
+    metadata:
+      labels:
+        app: node
+    spec:
+      containers:
+        - name: node-container-nautilus
+          image: gcr.io/kodekloud/centos-ssh-enabled:node
+          ports:
+            - containerPort: 8080
+  replicas: 2

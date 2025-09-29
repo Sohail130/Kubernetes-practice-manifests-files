@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: countdown-datacenter-t3q2
+spec:
+  template:
+    metadata:
+      name: countdown-datacenter-t3q2
+    spec:
+      containers:
+        - name: container-countdown-datacenter-t3q2
+          image: debian:latest
+          command: ["sleep","5"]
+      restartPolicy: Never

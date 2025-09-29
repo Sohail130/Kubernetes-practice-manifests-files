@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-master
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+    db: redis
+  template:
+   metadata:
+     labels:
+       db: redis
+   spec:
+     containers:
+       - name: master-redis-nautilus
+         image: redis
+         resources:
+           requests:
+             cpu: 100m
+             memory: 100Mi
+         ports:
+           - containerPort: 6379
+
+    

@@ -1,0 +1,25 @@
+## This is a classic init container + main container Pod setup. 
+
+# Explanation:
+
+#Init container → runs first (red-init-datacenter-t1q5), prints Welcome!, then exits.
+#Main container → (red-main-datacenter-t1q5), runs sleep 1000 to keep the pod alive.
+# Pod (red-datacenter-t1q5) will not start the main container until the init container completes successfully.
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: red-datacenter-t1q5
+spec:
+  initContainers:
+    - name: red-init-datacenter-t1q5
+      image: debian:latest
+      command: [ '/bin/bash', '-c' ]
+      args: [ "echo 'Welcome!'" ] 
+  containers:
+    - name: red-main-datacenter-t1q5
+      image: debian:latest
+      command: [ '/bin/bash', '-c' ]
+      args:
+        - "sleep 1000"

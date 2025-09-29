@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lamp-wp
+spec:
+  selector:
+   matchLabels:
+        app: lamp    
+  template:
+    metadata:
+      labels:
+        app: lamp
+    spec:
+      containers:
+        - name: httpd-php-container
+          image: webdevops/php-apache:alpine-3-php7
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /opt/docker/etc/php/php.ini
+              name: php-vol
+              subPath: php.ini
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-root-password
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-database
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-password
+          - name: MYSQL_HOST
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-host
+
+        - name: mysql-container
+          image: mysql:5.6
+          ports:
+            - containerPort: 3306
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-root-password
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-database
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-password
+          - name: MYSQL_HOST
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secrets
+                key: mysql-host
+      volumes:
+      - name: php-vol
+        configMap:
+          name: php-config

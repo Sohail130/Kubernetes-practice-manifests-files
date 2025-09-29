@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ic-deploy-datacenter
+  labels:
+    app: ic-datacenter
+spec:
+  selector:
+    matchLabels:
+      app: ic-datacenter
+  template:
+    metadata:
+      labels:
+        app: ic-datacenter
+    spec:
+      initContainers:
+        - name: ic-msg-datacenter
+          image: debian:latest
+          command: ['/bin/bash', '-c'] 
+          args:
+            -  'echo Init Done - Welcome to xFusionCorp Industries > /ic/beta'
+          volumeMounts:
+            - mountPath: /ic
+              name:  ic-volume-datacenter     
+      containers:
+        - name: ic-main-datacenter
+          image: debian:latest
+          command: ['/bin/bash', '-c'] 
+          args:
+            -  'while true; do cat /ic/beta; sleep 5; done'
+          volumeMounts:
+            - mountPath: /ic
+              name: ic-volume-datacenter
+      volumes:
+        - name: ic-volume-datacenter
+          emptyDir: {}
+            

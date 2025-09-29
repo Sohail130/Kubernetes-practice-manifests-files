@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: datacenter
+  name: httpd-deploy  
+spec:
+  selector:
+    matchLabels:
+      app: httpd-deploy
+  template:
+    metadata:
+      name: httpd-deploy-pod
+      labels:
+        app: httpd-deploy
+    spec:
+      containers:
+        - name: httpd
+          image: httpd:2.4.27
+  replicas: 4
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 2
